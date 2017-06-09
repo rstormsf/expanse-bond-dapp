@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Web3 from 'web3';
-import { Table, Input } from 'semantic-ui-react'
+import { Table, Input, Grid, Header, Icon } from 'semantic-ui-react'
 import isValidExpAddress from './helpers/addressValidator';
+import './Footer.css';
 import sweetAlert from 'sweetalert';
 import 'sweetalert/dist/sweetalert.css';
 
@@ -22,8 +23,7 @@ class App extends Component {
     this.onSearch = this.onSearch.bind(this);
     this.state = {
       blockNumber: web3.eth.blockNumber,
-      userAddress: '0x00',
-      ...deployedBondContract
+      userAddress: '0x00'
     }
   }
   componentDidMount() {
@@ -34,27 +34,28 @@ class App extends Component {
     });
   }
 
-  onSearch(){
+  onSearch() {
     const address = this.refs.search.inputRef.value;
-    if(isValidExpAddress(address.trim())){
+    if (isValidExpAddress(address.trim())) {
       console.log('onSearch', address);
       this.refs.search.inputRef.value = '';
-      this.setState({userAddress: address});
+      this.setState({ userAddress: address });
     } else {
       sweetAlert("Oops...", "This is invalid Expanse Address!", "error");
     }
   }
-
+// 0xb7c83f5e47b0513ce58364d57aa5db7c18243133 - example address to search for
   render() {
     return (
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>blockNumber: {this.state.blockNumber}</h2>
+          <h3>expansebondapp.tk</h3>
         </div>
-        
-        <Input style={{width: '600px', marginTop: '10px'}} placeholder="Search..." ref="search" action={{content: 'GO', onClick: this.onSearch }} />
-        <Table celled color="purple" sortable>
+
+        <Input className="Search" style={{ width: '600px', marginTop: '10px' }} placeholder="Your Expanse address in hex format" ref="search" action={{ content: 'GO', onClick: this.onSearch }} />
+        <Table className="Table" celled color="purple" sortable>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Name</Table.HeaderCell>
@@ -65,30 +66,53 @@ class App extends Component {
           <Table.Body>
             <Table.Row>
               <Table.Cell>Active Bonds:</Table.Cell>
-              <Table.Cell>{this.state.activeBonds().toNumber()}</Table.Cell>
+              <Table.Cell>{deployedBondContract.activeBonds().toNumber()}</Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>nBonds</Table.Cell>
-              <Table.Cell>{this.state.nBonds().toNumber()}</Table.Cell>
+              <Table.Cell>{deployedBondContract.nBonds().toNumber()}</Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>Total Bonds</Table.Cell>
-              <Table.Cell>{this.state.totalBonds().toNumber()}</Table.Cell>
+              <Table.Cell>{deployedBondContract.totalBonds().toNumber()}</Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>Total Bonds</Table.Cell>
-              <Table.Cell>{this.state.limitBonds().toNumber()}</Table.Cell>
+              <Table.Cell>{deployedBondContract.limitBonds().toNumber()}</Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>User getBalance </Table.Cell>
-              <Table.Cell>{this.state.getBalance(this.state.userAddress).toNumber()}</Table.Cell>
+              <Table.Cell>{deployedBondContract.getBalance(this.state.userAddress).toNumber()}</Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>User Bonds array length</Table.Cell>
-              <Table.Cell>{this.state.getUser(this.state.userAddress)[2].length}</Table.Cell>
+              <Table.Cell>{deployedBondContract.getUser(this.state.userAddress)[2].length}</Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>
+        <footer>
+          <div className="footer-inner">
+            <Grid>
+                <Grid.Column>
+                  <Grid.Row>
+                    <a href="http://www.gander.tech/address/0x6e4a860420e024d2f269d45f85a24dc6f586376d">0x6e4a860420e024d2f269d45f85a24dc6f586376d</a>
+                    </Grid.Row>
+                    <Grid.Row>
+                      Bond App Contract on <a href="http://www.expanse.tech/">Expanse</a>
+                    </Grid.Row>
+                    <Grid.Row>
+                      Made by Roman Storm
+                    </Grid.Row>
+                    <Header as="h3" inverted>
+                      <a href="https://github.com/rstormsf/expanse-bond-dapp">
+                        <Icon name="github" link size="big"/>
+                      </a>
+                            
+                    </Header>
+                </Grid.Column>
+            </Grid>
+          </div>
+        </footer>
       </div>
     );
   }

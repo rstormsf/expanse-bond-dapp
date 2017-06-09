@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "author": "Roman Storm",
   "private": true,
-  "homepage": "http://rstormsf.github.io/expanse-bond-dapp",
+  "homepage": "http://expansebondapp.tk",
   "dependencies": {
     "gh-pages": "^1.0.0",
     "react": "^15.5.4",
